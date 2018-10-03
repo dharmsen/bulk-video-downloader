@@ -18,6 +18,7 @@ NOTE: every link should be on a separate line
 2. copy the direct video links from Instagram to the 'instagram_links.txt' file
 
 NOTE: every link should be on a seperate line
+
 3. run the 'run.bat' file. This will install the needed modules and run the downloadtool
 4. Wait untill the cmd closes. The downloaded videos from YouTube and Instagram should be in their respective folders.
 
