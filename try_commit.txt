@@ -1,3 +1,0 @@
-this is to test the git cmd commit
-
-this is to test the correct authorization
