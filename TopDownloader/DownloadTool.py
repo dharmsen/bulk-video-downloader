@@ -48,26 +48,38 @@ def download_insta(url, filename):
 
 def download_yt_videos(links, path):
 	for i in range(len(links)):
-		print('Downloading YT Video ' + str(i))
-		yt_vid = YouTube(links[i])
 		try:
-			vidid = str((i+1)) + '.. ' + GetYouTubeID(links[i])
-		except IndexError:
-			vidid = str((i+1))
-		stream = yt_vid.streams.filter(file_extension='mp4').first()
-		stream.download(path, vidid)
+			print('Downloading YT Video ' + str(i))
+			yt_vid = YouTube(links[i])
+			try:
+				vidid = str((i+1)) + '.. ' + GetYouTubeID(links[i])
+			except IndexError:
+				vidid = str((i+1))
+			stream = yt_vid.streams.filter(file_extension='mp4').first()
+			stream.download(path, vidid)
+		except:
+			print('%d failed to download, moving on.' % GetYouTubeID(links[i]))
 
 def download_insta_videos(links, path):
 	for i in range(len(links)):
 		print('Downloading Insta Video ' + str(i))
 		download_insta(links[i], str(i))
 
+def addtolog(message : str):
+
 def shutdown():
 	print('Finished downloading all videos! Thanks for using this DownloadTool!')
 	print('By Lourens Touwen - 2018, based on pyTube')
 	print('\n')
-	print('Shutting down in 5 seconds')
-	time.sleep(5)
+	print('You can close this window')
+	while True:
+		time.sleep(60)
+
+def init_filepaths():
+	if not os.path.isdir(str(os.getcwd())+'\\yt_videos'):
+		os.makedirs(str(os.getcwd())+'\\yt_videos')
+	if not os.path.isdir(str(os.getcwd())+'\\insta_videos'):
+		os.makedirs(str(os.getcwd())+'\\insta_videos')
 
 
 yt_path = 'links_youtube.txt'
@@ -75,7 +87,7 @@ insta_path = 'links_instagram.txt'
 print('Amount Of YT Videos: ' + str(len(read_file(yt_path))))
 print('Amount Of Instagram Videos: ' + str(len(read_file(insta_path))))
 
+init_filepaths()
 download_yt_videos(read_file(yt_path), str(os.getcwd())+'\\yt_videos')
 download_insta_videos(read_file(insta_path), str(os.getcwd())+'\\insta_videos\\')
-
 shutdown()

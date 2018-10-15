@@ -7,7 +7,8 @@ uses pytube module for youtube handling
 
 Setup:
 1. install python 3.7.0
-2. make sure pip the install functionality works
+2. pip install requests
+3. pip install pytube
 
 How to use:
 1. copy the direct video links from YouTube to the 'youtube_links.txt' file
