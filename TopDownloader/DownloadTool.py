@@ -5,8 +5,6 @@ from sys import argv
 import requests
 import time
 
-#added feature
-
 def GetYouTubeID(youtubelink):
 	try:
 		startid = youtubelink.index('=')
@@ -59,9 +57,9 @@ def download_yt_videos(links, path):
 			stream = yt_vid.streams.filter(file_extension='mp4').first()
 			stream.download(path, vidid)
 		except:
-			erormsg = str(links[i]) + ' failed to download, moving on...'
+			errormsg = str(links[i]) + ' failed to download, moving on...'
 			addtolog(errormsg)
-			print('%d failed to download, moving on.' % GetYouTubeID(links[i]))
+			print('%s failed to download, moving on.' % GetYouTubeID(links[i]))
 
 def download_insta_videos(links, path):
 	for i in range(len(links)):
@@ -69,14 +67,14 @@ def download_insta_videos(links, path):
 			print('Downloading Insta Video ' + str(i))
 			download_insta(links[i], str(i))
 		except:
-			erormsg = str(links[i]) + ' failed to download, moving on...'
+			errormsg = str(links[i]) + ' failed to download, moving on...'
 			addtolog(errormsg)
 			print('video %d failed to download, moving on.' % i)
 
 
 def addtolog(message : str):
 	if not os.path.isfile(os.getcwd() + '\\log.txt'):
-		with open('log.txt', 'w') as fileouput:
+		with open('log.txt', 'w') as fileoutput:
 			fileoutput.write(message)
 	else:
 		with open('log.txt', 'a') as fileoutput:
@@ -86,12 +84,15 @@ def addtolog(message : str):
 
 
 def shutdown():
+	print('\n')
 	print('Finished downloading! Thanks for using this DownloadTool!')
 	amountofinsta = len(os.listdir(os.getcwd()+'\\insta_videos\\'))
 	amountofyt = len(os.listdir(os.getcwd()+'\\yt_videos\\'))
+
 	print('Downloaded %d YouTube video(s)' % amountofyt)
 	print('Downloaded %d Instagram video(s)' % amountofinsta)
 	print('\n')
+
 	print('Lourens Touwen - © 2018, based on pyTube')
 	print('\n')
 	print('You can close this window.')
@@ -103,12 +104,15 @@ def init_filepaths():
 		os.makedirs(str(os.getcwd())+'\\yt_videos')
 	if not os.path.isdir(str(os.getcwd())+'\\insta_videos'):
 		os.makedirs(str(os.getcwd())+'\\insta_videos')
+	timestr = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+	addtolog('Run: ' + timestr)
 
 
 yt_path = 'links_youtube.txt'
 insta_path = 'links_instagram.txt'
 print('Amount Of YT Videos: ' + str(len(read_file(yt_path))))
 print('Amount Of Instagram Videos: ' + str(len(read_file(insta_path))))
+print('\n')
 
 init_filepaths()
 download_yt_videos(read_file(yt_path), str(os.getcwd())+'\\yt_videos')
