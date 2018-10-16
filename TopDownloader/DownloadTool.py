@@ -8,11 +8,15 @@ import time
 #added feature
 
 def GetYouTubeID(youtubelink):
-	startid = youtubelink.index('=')
-	vidid = ''
-	for i in range(startid+1, startid+12):
-		vidid += youtubelink[i]
-	return vidid
+	try:
+		startid = youtubelink.index('=')
+		vidid = ''
+		for i in range(startid+1, startid+12):
+			vidid += youtubelink[i]
+		return vidid
+	except IndexError:
+		addtolog('ID error with ' + str(youtubelink))
+		return 'IdError'
 
 def process_lines(lines):
 	linklist = []
@@ -51,27 +55,46 @@ def download_yt_videos(links, path):
 		try:
 			print('Downloading YT Video ' + str(i))
 			yt_vid = YouTube(links[i])
-			try:
-				vidid = str((i+1)) + '.. ' + GetYouTubeID(links[i])
-			except IndexError:
-				vidid = str((i+1))
+			vidid = str((i+1)) + '.. ' + GetYouTubeID(links[i])
 			stream = yt_vid.streams.filter(file_extension='mp4').first()
 			stream.download(path, vidid)
 		except:
+			erormsg = str(links[i]) + ' failed to download, moving on...'
+			addtolog(errormsg)
 			print('%d failed to download, moving on.' % GetYouTubeID(links[i]))
 
 def download_insta_videos(links, path):
 	for i in range(len(links)):
-		print('Downloading Insta Video ' + str(i))
-		download_insta(links[i], str(i))
+		try:
+			print('Downloading Insta Video ' + str(i))
+			download_insta(links[i], str(i))
+		except:
+			erormsg = str(links[i]) + ' failed to download, moving on...'
+			addtolog(errormsg)
+			print('video %d failed to download, moving on.' % i)
+
 
 def addtolog(message : str):
+	if not os.path.isfile(os.getcwd() + '\\log.txt'):
+		with open('log.txt', 'w') as fileouput:
+			fileoutput.write(message)
+	else:
+		with open('log.txt', 'a') as fileoutput:
+			fileoutput.write('\n')
+			fileoutput.write(message)
+
+
 
 def shutdown():
-	print('Finished downloading all videos! Thanks for using this DownloadTool!')
-	print('By Lourens Touwen - 2018, based on pyTube')
+	print('Finished downloading! Thanks for using this DownloadTool!')
+	amountofinsta = len(os.listdir(os.getcwd()+'\\insta_videos\\'))
+	amountofyt = len(os.listdir(os.getcwd()+'\\yt_videos\\'))
+	print('Downloaded %d YouTube video(s)' % amountofyt)
+	print('Downloaded %d Instagram video(s)' % amountofinsta)
 	print('\n')
-	print('You can close this window')
+	print('Lourens Touwen - © 2018, based on pyTube')
+	print('\n')
+	print('You can close this window.')
 	while True:
 		time.sleep(60)
 
