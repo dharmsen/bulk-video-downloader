@@ -5,7 +5,7 @@ from sys import argv
 import requests
 import time
 
-def GetYouTubeID(youtubelink):
+def GetYouTubeID(youtubelink : str) -> str:
 	try:
 		startid = youtubelink.index('=')
 		vidid = ''
@@ -14,7 +14,7 @@ def GetYouTubeID(youtubelink):
 		return vidid
 	except IndexError:
 		addtolog('ID error with ' + str(youtubelink))
-		return 'IdError'
+		raise Exception('IdError)
 
 def process_lines(lines):
 	linklist = []
@@ -24,7 +24,7 @@ def process_lines(lines):
 		linklist.append(link)
 	return linklist
 
-def read_file(path):
+def read_file(path : str):
 	linelist = []
 	with open(path, 'r') as file:
 		for line in file:
